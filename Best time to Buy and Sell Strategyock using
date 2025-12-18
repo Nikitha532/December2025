@@ -1,0 +1,15 @@
+class Solution:
+    def maxProfit(self, prices: List[int], strategy: List[int], k: int) -> int:
+        n = len(prices)
+        s = [0]*(n+1)
+        t = [0]*(n+1)
+        for i in range(1, n+1):
+            s[i] = s[i-1] + prices[i-1]*strategy[i-1]
+            t[i] = t[i-1] + prices[i-1]
+        ans = s[n]
+        half = k // 2
+        for i in range(k, n+1):
+            originalwindow = s[i] - s[i-k]
+            new_half_sells = t[i] - t[i-half]
+            ans = max(ans, s[n]-originalwindow + new_half_sells)
+        return ans
