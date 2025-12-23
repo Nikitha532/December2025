@@ -1,0 +1,22 @@
+class Solution:
+    def maxTwoEvents(self, events: List[List[int]]) -> int:
+        events.sort()
+        
+        min_heap = []  # (endTime, value)
+        max_value_so_far = 0
+        ans = 0
+        
+        for start, end, value in events:
+            # Remove events that ended before current start
+            while min_heap and min_heap[0][0] < start:
+                _, val = heapq.heappop(min_heap)
+                max_value_so_far = max(max_value_so_far, val)
+            
+            # Combine current event with best previous non-overlapping event
+            ans = max(ans, max_value_so_far + value)
+            
+            # Push current event
+            heapq.heappush(min_heap, (end, value))
+        
+        return ans
+        
